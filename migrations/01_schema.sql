@@ -22,7 +22,7 @@ CREATE TABLE properties (
   cost_per_night FLOAT(2) NOT NULL DEFAULT 0,
   parking_spaces INTEGER NOT NULL DEFAULT 0,
   number_of_bathrooms FLOAT(1) NOT NULL DEFAULT 0,
-  number_of_bedroom INTEGER NOT NULL DEFAULT 0,
+  number_of_bedrooms INTEGER NOT NULL DEFAULT 0,
   street VARCHAR(255) NOT NULL,
   country VARCHAR(255) NOT NULL,
   city VARCHAR(255) NOT NULL,
