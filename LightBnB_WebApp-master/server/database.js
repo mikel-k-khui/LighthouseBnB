@@ -30,8 +30,8 @@ const getUserWithEmail = function(email) {
       return res.rows[0] === undefined ? null : res.rows[0];
     })
     .catch(err => {
-      return Promise.reject(null); 
-    });    
+      return Promise.reject(null);
+    });
 };
 exports.getUserWithEmail = getUserWithEmail;
 
