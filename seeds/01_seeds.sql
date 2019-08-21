@@ -1,3 +1,8 @@
+DELETE FROM users;
+DELETE FROM properties;
+DELETE FROM reservations;
+DELETE FROM property_reviews;
+
 INSERT INTO users (name, email, password) 
 VALUES ('Bart Simpson', 'bart@simpson.s', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'),
 ('Stever Rogers', 'captain@avengers.org', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'),
@@ -12,7 +17,7 @@ INSERT INTO properties (
   cost_per_night,
   parking_spaces,
   number_of_bathrooms,
-  number_of_bedroom,
+  number_of_bedrooms,
   street,
   country,
   city,
@@ -20,9 +25,9 @@ INSERT INTO properties (
   post_code,
   active) 
 VALUES
-(1, 'home', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6','101000',2, 2, 5, '744 Evergreen Terrace', 'United States', 'Springfield','Oregon', '49007', false),
-(3, 'Apartment', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6','1000',1, 2, 2, '1614 Connecticut Avenue NW', 'United States', 'Washington','District of Columbia', '20009', true),
-(3, 'Sanctum Sanctorum', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6','1000000',2, 10.5, 20, '177A Bleecker Street', 'United States', 'New York City','New York', '10012-1406', true);
+(1, 'home', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6',101000,2, 2, 5, '744 Evergreen Terrace', 'United States', 'Springfield','Oregon', '49007', false),
+(3, 'Apartment', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6',1000,1, 2, 2, '1614 Connecticut Avenue NW', 'United States', 'Washington','District of Columbia', '20009', true),
+(3, 'Sanctum Sanctorum', 'description', 'https://imgur.com/gallery/7zG5pn6', 'https://imgur.com/gallery/7zG5pn6',1000000,2, 10.5, 20, '177A Bleecker Street', 'United States', 'New York City','New York', '10012-1406', true);
 
 INSERT INTO reservations (guest_id, property_id,start_date, end_date) 
 VALUES (1, 2, '2018-09-11', '2018-09-26'),
