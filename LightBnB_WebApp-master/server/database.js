@@ -11,23 +11,27 @@ const pool = new Pool({
 });
 
 /// Users
-
+// test: user cadencerollins@live.com or id=2
+//test db: user allisonjackson@mail.com
 /**
  * Get a single user from the database given their email.
  * @param {String} email The email of the user.
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithEmail = function(email) {
-  let user;
-  for (const userId in users) {
-    user = users[userId];
-    if (user.email.toLowerCase() === email.toLowerCase()) {
-      break;
-    } else {
-      user = null;
-    }
-  }
-  return Promise.resolve(user);
+  const queryStr = `
+  SELECT name, email, password, id
+  FROM users
+  WHERE email = $1;
+  `;
+
+  return pool.query(queryStr, [email])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows[0];
+    })
+    .catch(err => {
+      return Promise.reject(null); 
+    });    
 };
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -37,7 +41,18 @@ exports.getUserWithEmail = getUserWithEmail;
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithId = function(id) {
-  return Promise.resolve(users[id]);
+  const queryStr = `
+  SELECT name, email, password, id
+  FROM users
+  WHERE email = $1;
+  `;
+  return pool.query(queryStr, [id])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows[0];
+    })
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getUserWithId = getUserWithId;
 
@@ -48,10 +63,20 @@ exports.getUserWithId = getUserWithId;
  * @return {Promise<{}>} A promise to the user.
  */
 const addUser =  function(user) {
-  const userId = Object.keys(users).length + 1;
-  user.id = userId;
-  users[userId] = user;
-  return Promise.resolve(user);
+  const queryStr = `
+  INSERT INTO users (name, email, password) 
+  VALUES ($1, $2, $3) RETURNING *;
+  `;
+  console.log(user.name, user.email, user.password);
+  return pool.query(queryStr, [user.name, user.email, user.password])
+    .then(res => {
+      console.log(res.rows);
+      return res.rows[0] === undefined ? null : res.rows;
+    })
+    .catch(err => {
+      console.log(err);
+      return Promise.reject(null);
+    });
 };
 exports.addUser = addUser;
 
@@ -80,7 +105,6 @@ const getAllProperties = function(options, limit = 10) {
   SELECT * FROM properties
   LIMIT $1;
   `;
-  
   return pool.query(queryStr, [limit])
     .then(res => res.rows);
 };
