@@ -125,7 +125,7 @@ const getAllProperties = function(options, limit = 10) {
   `;
   // check WHERE statement, e.g. WHERE city LIKE '%couv%' AND cost_per_night > 10527 AND cost_per_night < 75000 AND owner_id=222
 
-  if (options.city) {  
+  if (options.city) {
     queryParams.push(`%${options.city}%`);
     queryStr += `WHERE city LIKE $${queryParams.length} `;
   }
@@ -178,9 +178,27 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function(property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
+  let queryParams = [];
+  let insertStr = 'INSERT INTO properties (';
+  let valuesStr = 'VALUES (';
+
+  for (const param in property) {
+    insertStr += `${param}, `;
+    console.log(`${param}=${property[param]}`);
+    queryParams.push(`${property[param]}`);
+    valuesStr += `$${queryParams.length}, `;
+  }
+
+  if (insertStr.endsWith(', ')) {
+    insertStr = insertStr.substring(0, insertStr.length - 2) + `)
+    `;
+  }
+  if (valuesStr.endsWith(', ')) {
+    valuesStr = valuesStr.substring(0, valuesStr.length - 2) + ') RETURNING *;';
+  }
+
+  console.log(insertStr + valuesStr);
+  return pool.query(insertStr + valuesStr, queryParams)
+    .then(res => res.row);
 };
 exports.addProperty = addProperty;
