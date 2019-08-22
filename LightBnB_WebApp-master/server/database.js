@@ -1,5 +1,5 @@
-const properties = require('./json/properties.json');
-const users = require('./json/users.json');
+// const properties = require('./json/properties.json');
+// const users = require('./json/users.json');
 
 // setting node-Postgres SQL to vagrant VM database: default port 5432 is overridden in server.js
 const { Pool } = require('pg');
