@@ -7,11 +7,11 @@
 -- -- This will only be for a single user, so use 1 for the user_id.
 -- Limit the results to 10.
 
-SELECT reservations.*, properties.*, avg(property_reviews.rating) AS average_rating
+SELECT reservations.*, properties.title, avg(property_reviews.rating) AS average_rating
 FROM reservations
 JOIN properties ON (properties.id=reservations.property_id)
 JOIN property_reviews ON (reservations.id=property_reviews.reservation_id)
-WHERE reservations.end_date < NOW()::date AND property_reviews.guest_id = 3
+WHERE reservations.end_date > NOW()::date AND property_reviews.guest_id = 2
 GROUP BY reservations.id, properties.id
 ORDER BY reservations.start_date DESC
 LIMIT 10
