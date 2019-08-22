@@ -104,7 +104,7 @@ const getAllReservations = function(guest_id, limit = 10) {
     .catch(err => {
       return Promise.reject(null);
     });
-  };
+};
 exports.getAllReservations = getAllReservations;
 
 /// Properties
