@@ -84,7 +84,7 @@ exports.addUser = addUser;
  * @param {string} guest_id The id of the user.
  * @return {Promise<[{}]>} A promise to the reservations.
  */
-const getAllReservations = function(guest_id, limit = 10) {
+const getAllReservations = function(guestId, limit = 10) {
   //test users.id=28, evelynaustin@ymail.com
   const queryStr = `
   SELECT reservations.*, properties.*, avg(property_reviews.rating) AS average_rating
@@ -97,7 +97,7 @@ const getAllReservations = function(guest_id, limit = 10) {
   LIMIT $2
   `;
 
-  return pool.query(queryStr, [guest_id, limit])
+  return pool.query(queryStr, [guestId, limit])
     .then(res => {
       return res.rows[0] === undefined ? null : res.rows;
     })
@@ -168,7 +168,10 @@ const getAllProperties = function(options, limit = 10) {
   // console.log(queryStr, queryParams, " and ", limit);
 
   return pool.query(queryStr, queryParams)
-    .then(res => res.rows);
+    .then(res => res.rows)
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getAllProperties = getAllProperties;
 
@@ -197,8 +200,11 @@ const addProperty = function(property) {
     valuesStr = valuesStr.substring(0, valuesStr.length - 2) + ') RETURNING *;';
   }
 
-  console.log(insertStr + valuesStr);
+  // console.log(insertStr + valuesStr);
   return pool.query(insertStr + valuesStr, queryParams)
-    .then(res => res.row);
+    .then(res => res.row)
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.addProperty = addProperty;
