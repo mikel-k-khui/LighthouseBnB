@@ -3,7 +3,7 @@
 // const users = require('./json/users.json');
 
 //single reference to the pg
-const db = require('./db_pg');
+const db = require('../db');
 
 /// Users
 // in-memory test: user cadencerollins@live.com or id=2
@@ -20,7 +20,13 @@ const getUserWithEmail = function(email) {
   WHERE email = $1;
   `;
 
-  return db.userQuery(queryStr, [email]);
+  return pool.query(queryStr, [email])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows[0];
+    })
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -35,7 +41,13 @@ const getUserWithId = function(id) {
   FROM users
   WHERE email = $1;
   `;
-  return db.userQuery(queryStr, [id]);
+  return pool.query(queryStr, [id])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows[0];
+    })
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getUserWithId = getUserWithId;
 
@@ -50,7 +62,13 @@ const addUser =  function(user) {
   INSERT INTO users (name, email, password) 
   VALUES ($1, $2, $3) RETURNING *;
   `;
-  return db.query(queryStr, [user.name, user.email, user.password]);
+  return pool.query(queryStr, [user.name, user.email, user.password])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows;
+    })
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.addUser = addUser;
 
@@ -74,7 +92,13 @@ const getAllReservations = function(guestId, limit = 10) {
   LIMIT $2
   `;
 
-  return db.query(queryStr, [guestId, limit]);
+  return pool.query(queryStr, [guestId, limit])
+    .then(res => {
+      return res.rows[0] === undefined ? null : res.rows;
+    })
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getAllReservations = getAllReservations;
 
@@ -138,7 +162,11 @@ const getAllProperties = function(options, limit = 10) {
 
   // console.log(queryStr, queryParams, " and ", limit);
 
-  return db.query(queryStr, queryParams);
+  return pool.query(queryStr, queryParams)
+    .then(res => res.rows)
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.getAllProperties = getAllProperties;
 
@@ -154,7 +182,7 @@ const addProperty = function(property) {
 
   for (const param in property) {
     insertStr += `${param}, `;
-    // console.log(`${param}=${property[param]}`);
+    console.log(`${param}=${property[param]}`);
     queryParams.push(`${property[param]}`);
     valuesStr += `$${queryParams.length}, `;
   }
@@ -168,6 +196,10 @@ const addProperty = function(property) {
   }
 
   // console.log(insertStr + valuesStr);
-  return db.query(insertStr + valuesStr, queryParams);
+  return pool.query(insertStr + valuesStr, queryParams)
+    .then(res => res.row)
+    .catch(err => {
+      return Promise.reject(null);
+    });
 };
 exports.addProperty = addProperty;
